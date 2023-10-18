@@ -2,6 +2,9 @@
 
 Slime and hands
 
+![Slime](SLIME.gif "Slime")
+
+
 ## Timeline
 
 ### Week 1 (Data cleaning/pre-processing)
