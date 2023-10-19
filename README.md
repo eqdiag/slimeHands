@@ -33,5 +33,5 @@ Slime and hands
 
 ### Week 4 (Final touches, make sure it works then polish)
 - [ ] Test out code on the screen
-- [ ] Add fancy stuff like flowy layers we talked about
+- [ ] Add fancy stuff like flowy layers we talked about (optical flow is probably what we wanna use here)
 - [ ] Install functioning screen on box

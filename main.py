@@ -2,17 +2,85 @@ import cv2 as cv
 import numpy as np
 import os
 
+NUM_NEIGHBORS = 10
 
-#View frames in grayscale, convert them to vecs
+DESIRED_SHAPE = (100,100)
+DISPLAY_SHAPE = (200,200)
+DATA_LEN = DESIRED_SHAPE[0]*DESIRED_SHAPE[1]
+TRAINING_FRAC = 0.7
+
+data = []
+rgb_images = []
+
+print("Loading in images from `frames` dir...")
+
+#Read all images in "frames" dir as grayscale into rows of matrix of size (num images x DATA_LEN)
 for file in os.listdir("./frames"):
     path = "./frames/" + file
-    img = cv.imread(path,cv.IMREAD_GRAYSCALE)
-    x = np.array(img)
-    x = x.flatten()
-    x = np.reshape(x,(x.shape[0],1))
-    #print(train.shape)
-    cv.imshow('graycsale image',img)
+    
+    rgb_img = cv.imread(path,cv.COLOR_BGR2RGB)
+    rgb_images.append(rgb_img)
+    downsampled_img = cv.resize(rgb_img,DESIRED_SHAPE,interpolation = cv.INTER_LINEAR)
+    grey_img = cv.cvtColor(downsampled_img,cv.COLOR_RGB2GRAY)
+    x = np.array(grey_img).flatten().reshape((1,DATA_LEN))
+    #cv.imshow('im2',np.reshape(x,DESIRED_SHAPE))
+    #cv.waitKey(0)
+
+    data.append(x)
+
+
+
+print("Formatting data to be squeezed into kNN model...")
+
+#Prepare data for kNN model
+NUM_IMAGES = len(data)
+TRAINING_SIZE = int(TRAINING_FRAC*NUM_IMAGES)
+VALIDATE_SIZE = NUM_IMAGES - TRAINING_SIZE
+
+#Kinda abusive use of kNN, using index as category
+responses = np.arange(TRAINING_SIZE).reshape((TRAINING_SIZE,1)).astype(np.float32)
+
+X = np.zeros((NUM_IMAGES,DATA_LEN)).astype(np.float32)
+for i in range(NUM_IMAGES):
+    X[i] = data[i]
+
+
+
+print("Winding up the greasy cogs of the kNN distance machine...")
+
+
+#Set up kNN model
+knn = cv.ml.KNearest_create()
+knn.train(X[0:TRAINING_SIZE,:], cv.ml.ROW_SAMPLE,responses)
+
+print("Computing closest slimes...")
+
+ret, results, neighbours ,dist = knn.findNearest(X[TRAINING_SIZE:,:],NUM_NEIGHBORS)
+
+
+#Controls number of random images to test out at the end
+NUM_RANDOM = 5
+
+print(f"Now let's show {NUM_RANDOM} random images and their closest images from the dataset...fingers crossed...")
+
+
+for i in range(NUM_RANDOM):
+    #Pick a random image in validation set and see what the closest image is
+    rand_validation_idx = np.random.randint(0,VALIDATE_SIZE) 
+    rand_img = cv.resize(rgb_images[rand_validation_idx + TRAINING_SIZE],DISPLAY_SHAPE,interpolation = cv.INTER_LINEAR)
+
+
+    #0th index is closest
+    closest_img_index = int(neighbours[rand_validation_idx][0])
+    closest_img = cv.resize(rgb_images[closest_img_index],DISPLAY_SHAPE,interpolation = cv.INTER_LINEAR)
+
+    side_by_side_img = np.concatenate((rand_img,closest_img),axis = 1)
+
+    cv.imshow(f'LEFT =  Random (IDX = {rand_validation_idx}) | RIGHT = Closest (IDX = {closest_img_index})',side_by_side_img)
     cv.waitKey(0)
+    cv.destroyAllWindows()
+
+
 
 
 #Videos to frames
