@@ -25,7 +25,8 @@ python3 main.py
 - [x] given an image a, find the closest k images in the dataset
 
 ### Week 2 (Live stream viewer)
-- [ ] little viewer program that shows closest image for a given image
+- [x] little viewer program that shows closest image for a given image
+- [ ] test out viewer as data set grows and by varying paramters
 - [ ] setup live video streaming from phone
 - [ ] combine the littler viewer program with the live stream thing to get a viewer that gives the closet image based on the stream
 
