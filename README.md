@@ -4,15 +4,25 @@ Slime and hands
 
 ![Slime](SLIME.gif "Slime")
 
+## Dependencies
+- python3
+- numpy
+- opencv
+
+## Usage
+```
+git clone https://github.com/eqdiag/slimeHands.git
+python3 main.py
+```
 
 ## Timeline
 
 ### Week 1 (Data cleaning/pre-processing)
-- [ ] videos2frames to get dataset
-- [ ] image2grayscale
-- [ ] align all images
-- [ ] resize all images to (100x100?) to start
-- [ ] given an image a, find the closest k images in the dataset
+- [x] videos2frames to get dataset
+- [x] image2grayscale
+- [x] align all images
+- [x] resize all images to (100x100?) to start
+- [x] given an image a, find the closest k images in the dataset
 
 ### Week 2 (Live stream viewer)
 - [ ] little viewer program that shows closest image for a given image
