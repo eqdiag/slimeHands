@@ -9,6 +9,7 @@ DISPLAY_SHAPE = (200,200)
 DATA_LEN = DESIRED_SHAPE[0]*DESIRED_SHAPE[1]
 TRAINING_FRAC = 0.7
 
+
 data = []
 rgb_images = []
 
@@ -57,9 +58,10 @@ print("Computing closest slimes...")
 
 ret, results, neighbours ,dist = knn.findNearest(X[TRAINING_SIZE:,:],NUM_NEIGHBORS)
 
+print(neighbours.shape)
 
 #Controls number of random images to test out at the end
-NUM_RANDOM = 5
+NUM_RANDOM = 0
 
 print(f"Now let's show {NUM_RANDOM} random images and their closest images from the dataset...fingers crossed...")
 
@@ -81,7 +83,27 @@ for i in range(NUM_RANDOM):
     cv.destroyAllWindows()
 
 
+#Live capture (using iriun)
+cap = cv.VideoCapture(0)
 
+while True:
+    ret,frame = cap.read()
+    key = cv.waitKey(1)
+    downsampled_img = cv.resize(frame,DESIRED_SHAPE,interpolation = cv.INTER_LINEAR)
+    grey_img = cv.cvtColor(downsampled_img,cv.COLOR_RGB2GRAY)
+    x = grey_img.flatten().reshape((1,DATA_LEN)).astype(np.float32)
+    ret, results, neighbours ,dist = knn.findNearest(x,NUM_NEIGHBORS)
+    idx = int(neighbours[0][0])
+
+    closest_img = cv.resize(rgb_images[idx],DISPLAY_SHAPE,interpolation = cv.INTER_LINEAR)
+
+    downsampled_capture = cv.resize(frame,DISPLAY_SHAPE,interpolation = cv.INTER_LINEAR)
+    side_by_side_img = np.concatenate((downsampled_capture,closest_img),axis = 1)
+
+
+    cv.imshow('frame',side_by_side_img)
+    if key == 113:
+        break
 
 #Videos to frames
 ''' 

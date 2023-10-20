@@ -4,6 +4,10 @@ Slime and hands
 
 ![Slime](SLIME.gif "Slime")
 
+So for the iphone im using this program called Iriun webcam.
+It's super easy to setup with python.
+
+
 ## Dependencies
 - python3
 - numpy
@@ -26,8 +30,8 @@ python3 main.py
 
 ### Week 2 (Live stream viewer)
 - [x] little viewer program that shows closest image for a given image
-- [ ] test out viewer as data set grows and by varying paramters
-- [ ] setup live video streaming from phone
+- [x] test out viewer as data set grows and by varying paramters
+- [x] setup live video streaming from phone
 - [ ] combine the littler viewer program with the live stream thing to get a viewer that gives the closet image based on the stream
 
 ### Week 3 (HARDWARE: Scrounge for stuff)
