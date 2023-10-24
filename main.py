@@ -1,6 +1,7 @@
 import cv2 as cv
 import numpy as np
 import os
+import glob
 
 NUM_NEIGHBORS = 10
 
@@ -16,10 +17,9 @@ rgb_images = []
 print("Loading in images from `frames` dir...")
 
 #Read all images in "frames" dir as grayscale into rows of matrix of size (num images x DATA_LEN)
-for file in os.listdir("./frames"):
-    path = "./frames/" + file
+for file in glob.glob("./frames/*/*.jpg"):
     
-    rgb_img = cv.imread(path,cv.COLOR_BGR2RGB)
+    rgb_img = cv.imread(file,cv.COLOR_BGR2RGB)
     rgb_images.append(rgb_img)
     downsampled_img = cv.resize(rgb_img,DESIRED_SHAPE,interpolation = cv.INTER_LINEAR)
     grey_img = cv.cvtColor(downsampled_img,cv.COLOR_RGB2GRAY)
